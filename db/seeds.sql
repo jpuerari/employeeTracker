@@ -4,8 +4,8 @@ INSERT INTO department
 (name)
 VALUES
   ('Localization Engineer'),
-  ('In-house Translator')
-  ('Project Manager')
+  ('In-house Translator'),
+  ('Project Manager'),
   ('Clerk');
 
   INSERT INTO role
@@ -17,8 +17,9 @@ VALUES
   ('Desk Clerk', 40000, 4);
 
   INSERT INTO employees
-  (first_name, last_name, role_id),
+  (first_name, last_name, role_id)
+   VALUE
   ('Mark', 'Anthony', 1),
-  ('Allen' 'Smith', 2),
-  ('Jane' 'Doe', 3),
-  ('Carry' 'Johnson', 4);
+  ('Allen', 'Smith', 2),
+  ('Jane' ,'Doe', 3),
+  ('Carry','Johnson', 4);
