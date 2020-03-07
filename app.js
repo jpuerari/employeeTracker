@@ -8,17 +8,18 @@ const connection = require('./config/connection');
 // const { createEmployee, createRole, createDepartment } = require('./lib/db-items');
 
 // import arrays of questions for inquirer prompts
-const { startQ, createEmployee, createDepartments, createRoles } = require('./lib/prompts');
+const { start, createEmployee, departmentQuestions, roleQuestions } = require('./lib/prompts');
 
 // function to start prompt, defined to be async
 const startQuestions = async () => {
   // destructure response object out of first prompt, using await means no .then() needed
-  const { task } = await inquirer.prompt(startQ);
-
+  const { task } = await inquirer.prompt(start);
+  console.log(task)
   // depending on the answer, do an action
   if (task === 'Add an employee') {
     await includeEmployee();
   } else if (task === 'Add a department') {
+    console.log(":^)")
     await includeDepartment();
    } else if (task === 'Add a job role') {
       await addJobRole();
@@ -26,7 +27,9 @@ const startQuestions = async () => {
      await viewEmployeeList();
    } else if (task === 'View job roles') {
      await viewJobRoles();
-   }
+   } else if (task === 'View departments') {
+    await viewDepartments();
+  }
    else {
     connection.end();
   }
@@ -42,20 +45,57 @@ async function includeEmployee() {
   })
 };
 
+async function viewDepartments() {
+  connection.query('SELECT * FROM department',  (err, res) => {
+    console.table(res)
+    if(err) throw err;
+    startQuestions();
+  })
+};
+
+async function viewJobRoles() {
+  connection.query('SELECT * FROM role',  (err, res) => {
+    console.table(res)
+    if(err) throw err;
+    startQuestions();
+  })
+};
+
+async function viewEmployeeList() {
+  connection.query('SELECT * FROM employee',  (err, res) => {
+    console.table(res)
+    if(err) throw err;
+    startQuestions();
+  })
+};
+
 // function to create a new department
 async function includeDepartment() {
-  const { Department } = await inquirer.prompt(createDepartments);
-  createDepartment({
-    departmentName: department,
+  const data = await inquirer.prompt(departmentQuestions);
+  console.log(data)
+
+  connection.query('INSERT INTO department SET ?', 
+  {name: data.departmentName}, 
+  (err, createItemRes) => {
+    if(err) throw err;
+    startQuestions();
   })
 }
   
 
 // function to create a new role
 async function addJobRole() {
-  const { Salary } = await inquirer.prompt(createRoles);
-  createRole({
-    departmentName: department,
+  const data = await inquirer.prompt(roleQuestions);
+  console.log(data)
+  connection.query('INSERT INTO role SET ?', 
+  {
+    title: data.roleName,
+    salary: data.roleSalary,
+    department_id: data.departmentID
+  }, 
+  (err, createItemRes) => {
+    if(err) throw err;
+    startQuestions();
   })
 }
 

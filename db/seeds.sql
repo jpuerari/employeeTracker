@@ -16,7 +16,7 @@ VALUES
   ('Translation Project Manager', 50000, 3),
   ('Desk Clerk', 40000, 4);
 
-  INSERT INTO employees
+  INSERT INTO employee
   (first_name, last_name, role_id)
    VALUE
   ('Mark', 'Anthony', 1),
